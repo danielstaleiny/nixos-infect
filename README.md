@@ -2,6 +2,34 @@ This script aims to install NixOS on Digital Ocean droplets, Vultr servers, or
 OVH Virtual Private Servers (starting from distros that these services upports
 out of the box)
 
+## To Infect your server
+```bash
+git clone https://github.com/danielstaleiny/nixos-infect.git
+cd nixos-infect/
+./nixos-infect
+```
+
+## Changes made
+- add nixbuilder user
+- make sure you install [ vim git wget ]
+- ssh keys for nixos
+- mkdir /home/nixbuilder/nixos
+- touch /home/nixbuilder/nixos/.populate
+- mv /etc/nixos/* to /home/nixbuilder/nixos
+- ln -s /home/nixbuilder/nixos/configuration.nix /etc/nixos/configuration.nix
+- chown -R nixbuilder /home/nixbuilder/nixos
+
+## NOTE
+When nixos takes over it will re-generate ssh keys and because they changed
+Remove the line assigt to your server under .ssh/known_hosts
+```bash
+vim ~/.ssh/known_hosts
+G
+dd
+:wq
+```
+
+
 ## Source Distros
 
 This script has been tested and can install NixOS from the following source distros:
