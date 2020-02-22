@@ -277,7 +277,6 @@ infect() {
 
 prepareNixbuilder() {
   mkdir -p /home/nixbuilder/nixos
-  touch /home/nixbuilder/nixos/.populate
   mv /etc/nixos/* /home/nixbuilder/nixos
   ln -s /home/nixbuilder/nixos/configuration.nix /etc/nixos/configuration.nix
 }
