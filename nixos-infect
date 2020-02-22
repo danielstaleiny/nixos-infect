@@ -44,7 +44,6 @@ makeConf() {
     isNormalUser = true;
     uid = 1100;
     description = "User to modify configuration";
-    extraGroups = [ ];
   };
 
 
