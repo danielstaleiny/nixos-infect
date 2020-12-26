@@ -1,6 +1,6 @@
 This script aims to install NixOS on Digital Ocean droplets, Vultr servers, or
-OVH Virtual Private Servers (starting from distros that these services upports
-out of the box)
+OVH Virtual Private Servers (starting from distros that these services support
+out of the box).
 
 ## To Infect your server
 ```bash
@@ -36,13 +36,16 @@ This script has been tested and can install NixOS from the following source dist
 
 On Digital Ocean:
 - Fedora 24 x64
-- Ubuntu 16.04 x64
+- Ubuntu 20.04 x64
 
 On Vultr:
 - Ubuntu 18.10 x64
 
 On OVH Virtual Private Servers (experimental):
 - Debian
+
+On Hetzner cloud:
+- Ubuntu 18.04
 
 YMMV with any other hoster + image combination.
 
@@ -65,16 +68,15 @@ Settings -> "Destroy" -> "Rebuild from original").
 *TO USE:*
 - Add any custom config you want (see notes below)
 - Deploy the droplet indicated at the top of the file, enable ipv6, add your ssh key
-- cat customConfig.optional nixos-infect | ssh root@targethost
+- `cat customConfig.optional nixos-infect | ssh root@targethost`
 
-Alternatively, use the user data mechamism by supplying the lines between the following
-cat and EOF in the Digital Ocean Web UI (or HTTP API):
+Alternatively, you may utilize Digital Ocean's "user data" mechanism (found in the Web UI or HTTP API), and supply to it the following example yaml stanzas:
 
 ```yaml
 #cloud-config
 
 runcmd:
-  - curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | PROVIDER=digitalocean NIX_CHANNEL=nixos-19.09 bash 2>&1 | tee /tmp/infect.log
+  - curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | PROVIDER=digitalocean NIX_CHANNEL=nixos-20.03 bash 2>&1 | tee /tmp/infect.log
 ```
 Potential tweaks:
 - `/etc/nixos/{,hardware-}configuration.nix`: rudimentary mostly static config
@@ -92,7 +94,7 @@ write_files:
       environment.systemPackages = with pkgs; [ vim ];
     }
 runcmd:
-  - curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | PROVIDER=digitalocean NIXOS_IMPORT=./host.nix NIX_CHANNEL=nixos-19.09 bash 2>&1 | tee /tmp/infect.log
+  - curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | PROVIDER=digitalocean NIXOS_IMPORT=./host.nix NIX_CHANNEL=nixos-20.03 bash 2>&1 | tee /tmp/infect.log
 
 ```
 
@@ -103,10 +105,20 @@ To set up a NixOS Vultr server, instantiate an Ubuntu box with the following "St
 ```bash
 #!/bin/sh
 
-curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | PROVIDER=vultr NIX_CHANNEL=nixos-19.09 bash
+curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | NIX_CHANNEL=nixos-20.03 bash
 ```
 
 Allow for a few minutes over the usual Ubuntu deployment time for NixOS to download & install itself.
+
+## Hetzner cloud
+
+Hetzner cloud works out of the box. When creating a server provide the following script as "User data" (this has been tested using Ubuntu 20.04 as a base OS).
+
+```
+#!/bin/sh
+
+curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | NIX_CHANNEL=nixos-20.03 bash 2>&1 | tee /tmp/infect.log
+```
 
 ## Motivation
 
