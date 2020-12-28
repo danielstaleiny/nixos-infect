@@ -36,9 +36,9 @@ makeConf() {
     \"$line\" "; done <<< "$keys")
   ];
 
-  users.users.nixbuilder.openssh.authorizedKeys.keys = [$(while read -r line; do echo -n "
-    \"$line\" "; done <<< "$keys")
-  ];
+  # users.users.nixbuilder.openssh.authorizedKeys.keys = [$(while read -r line; do echo -n "
+  #   \"$line\" "; done <<< "$keys")
+  # ];
 
   environment.systemPackages = with pkgs; [
      wget
@@ -46,14 +46,14 @@ makeConf() {
      vim
   ];
 
-  users.users.nixbuilder = {
-    isNormalUser = true;
-    uid = 1100;
-    description = "User to modify configuration";
-  };
+  # users.users.nixbuilder = {
+  #   isNormalUser = true;
+  #   uid = 1100;
+  #   description = "User to modify configuration";
+  # };
 
 
-  security.sudo.extraRules = [ { commands = [ { command = "/run/current-system/sw/bin/nixos-rebuild"; options = [ "SETENV" "NOPASSWD" ] ; } ]; groups = [ 1100 ] ; users = [ "nixbuilder" ] ; }];
+  # security.sudo.extraRules = [ { commands = [ { command = "/run/current-system/sw/bin/nixos-rebuild"; options = [ "SETENV" "NOPASSWD" ] ; } ]; groups = [ 1100 ] ; users = [ "nixbuilder" ] ; }];
 
 }
 EOF
@@ -287,7 +287,7 @@ infect() {
   # Stage the Nix coup d'état
   touch /etc/NIXOS
   echo etc/nixos                   > /etc/NIXOS_LUSTRATE
-  echo home/nixbuilder            >> /etc/NIXOS_LUSTRATE
+  # echo home/nixbuilder            >> /etc/NIXOS_LUSTRATE
   echo etc/resolv.conf            >> /etc/NIXOS_LUSTRATE
   echo root/.nix-defexpr/channels >> /etc/NIXOS_LUSTRATE
 
@@ -310,7 +310,7 @@ prepareEnv
 makeSwap # smallest (512MB) droplet needs extra memory!
 checkEnv
 makeConf
-prepareNixbuilder
+# prepareNixbuilder
 infect
 removeSwap
 
